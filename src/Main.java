@@ -1,15 +1,35 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+import java.io.FileNotFoundException;
+
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+        MovieBookingSystem system = new MovieBookingSystem();
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
+        // 1. Checked Exception
+        try {
+            system.loadMovieSchedule("movie_schedule.txt"); // File does not exist
+        } catch (FileNotFoundException e) {
+            System.out.println("Checked Exception: " + e.getMessage() + " → path does not exist.");
         }
+
+        // 2. Custom Exception
+        try {
+            system.bookTicket("Titanic"); // Movie not listed
+        } catch (MovieNotAvailableException e) {
+            System.out.println("Custom Exception: The movie is not available – " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            System.out.println("Runtime Exception: Invalid movie name – " + e.getMessage());
+        }
+
+        // 3. Unchecked Exception
+        try {
+            system.bookTicket(""); // Null name → IllegalArgumentException
+        } catch (MovieNotAvailableException e) {
+            System.out.println("Custom Exception: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            System.out.println("Runtime Exception: Invalid movie name – " + e.getMessage());
+        }
+
+        // Finally
+        System.out.println("Thank you for using our movie booking system!");
     }
 }
